@@ -25,9 +25,7 @@ public class RiskResource {
 
     @Operation(
             summary = "Get risk",
-            security = {
-                    @SecurityRequirement(name = "Norman")
-            }
+            security = {@SecurityRequirement(name = "Norman")}
     )
     @GetMapping(value = "risks/{id}")
     public RiskDto getRiskById(@PathVariable UUID id) {
@@ -38,9 +36,7 @@ public class RiskResource {
 
     @Operation(
             summary = "Get risks paged",
-            security = {
-                    @SecurityRequirement(name = "Norman")
-            }
+            security = {@SecurityRequirement(name = "Norman")}
     )
     @GetMapping(value = "risks")
     public PageOfDto<RiskDto> pageRisksByQuery(

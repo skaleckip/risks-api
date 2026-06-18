@@ -29,7 +29,6 @@ public class OAuthSecurityConfig {
         return converter;
     }
 
-    // Todo, translate roles to ROLE_* authorities
     // Extract realm roles from JWT token and return them as Spring authorities.
     @SuppressWarnings("unchecked")
     private List<GrantedAuthority> mapAuthorities(final Map<String, Object> attributes) {
@@ -37,6 +36,7 @@ public class OAuthSecurityConfig {
                 .getOrDefault("realm_access", Collections.emptyMap()));
         final Collection<String> roles = ((Collection<String>) realmAccess
                 .getOrDefault("roles", Collections.emptyList()));
+        // Todo, translate roles to ROLE_* authorities to use them with hasRole(...)
         return roles.stream()
                 .map(role -> ((GrantedAuthority) new SimpleGrantedAuthority(role)))
                 .toList();
