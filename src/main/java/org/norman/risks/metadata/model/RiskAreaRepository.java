@@ -7,5 +7,6 @@ import java.util.UUID;
 
 public interface RiskAreaRepository extends JpaRepository<RiskArea, UUID> {
 
+    @SuppressWarnings("UnnecessaryModifier")
     public Optional<RiskArea> findByCode(String code);
 }

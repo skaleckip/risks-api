@@ -1,6 +1,5 @@
 package org.norman.risks.risk.svc;
 
-import jakarta.transaction.Transactional;
 import org.norman.risks.metadata.model.RiskArea;
 import org.norman.risks.risk.dto.RiskDto;
 import org.norman.risks.risk.model.Risk;
@@ -11,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,28 +25,28 @@ public class RiskService {
         this.riskRepository = riskRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<RiskDto> findRiskByIdOptional(UUID id) {
         logger.trace("findRiskByIdOptional: id={}", id);
         return riskRepository.findById(id).map(this::toRiskDto);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PageOfDto<RiskDto> pageRisksByNames(
             String name,
-            int pageIndex,
+            int pageNumber,
             int pageSize) {
-        logger.trace("pageRisksByNames: name={}, pageIndex={}, pageSize={}", name, pageIndex, pageSize);
-        var page = riskRepository.findByNameLike(name, PageRequest.of(pageIndex, pageSize));
+        logger.trace("pageRisksByNames: name={}, pageNumber={}, pageSize={}", name, pageNumber, pageSize);
+        var page = riskRepository.findByNameLike(name, PageRequest.of(pageNumber, pageSize));
         return this.toRiskDtoPage(page);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public PageOfDto<RiskDto> pageAllRisks(
-            int pageIndex,
+            int pageNumber,
             int pageSize) {
-        logger.trace("pageAllRisks: pageIndex={}, pageSize={}", pageIndex, pageSize);
-        var page = riskRepository.findAll(PageRequest.of(pageIndex, pageSize));
+        logger.trace("pageAllRisks: pageNumber={}, pageSize={}", pageNumber, pageSize);
+        var page = riskRepository.findAll(PageRequest.of(pageNumber, pageSize));
         return this.toRiskDtoPage(page);
     }
 
@@ -54,7 +54,7 @@ public class RiskService {
         if (risk == null) {
             return null;
         }
-        
+
         return new RiskDto(
                 risk.getId(),
                 risk.getName(),
@@ -66,6 +66,6 @@ public class RiskService {
     }
 
     public PageOfDto<RiskDto> toRiskDtoPage(Page<Risk> riskPage) {
-        return new PageOfDto<>(this.toRiskDtoList(riskPage.getContent()), riskPage.getNumber() - 1, riskPage.getSize(), riskPage.getTotalPages());
+        return new PageOfDto<>(this.toRiskDtoList(riskPage.getContent()), riskPage.getNumber(), riskPage.getSize(), riskPage.getTotalPages());
     }
 }

@@ -1,5 +1,7 @@
 package org.norman.risks.metadata.web;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import org.norman.risks.metadata.dto.RiskAreaDto;
 import org.norman.risks.metadata.svc.MetaService;
 import org.norman.risks.shared.web.NotFoundException;
@@ -15,6 +17,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "api")
+@SecurityRequirement(name = "Norman")
 public class MetaResource {
     private final Logger logger = LoggerFactory.getLogger(MetaResource.class);
     private final MetaService service;
@@ -23,20 +26,32 @@ public class MetaResource {
         this.service = service;
     }
 
+    @Operation(
+            summary = "Get risks area by ID",
+            security = {@SecurityRequirement(name = "Norman")}
+    )
     @GetMapping(value = "risk-areas/id:{id}")
-    public RiskAreaDto getRiskAreaById(@PathVariable(value = "id") UUID id) {
+    public RiskAreaDto getRiskAreaById(@PathVariable UUID id) {
         logger.trace("getRiskAreaById: id={}", id);
         return service.findRiskAreaByIdOptional(id)
                 .orElseThrow(NotFoundException::new);
     }
 
+    @Operation(
+            summary = "Get risks area by Code",
+            security = {@SecurityRequirement(name = "Norman")}
+    )
     @GetMapping(value = "risk-areas/code:{code}")
-    public RiskAreaDto getRiskAreaByCode(@PathVariable(value = "code") String code) {
+    public RiskAreaDto getRiskAreaByCode(@PathVariable String code) {
         logger.trace("getRiskAreaByCode: code={}", code);
         return service.findRiskAreaByCodeOptional(code)
                 .orElseThrow(NotFoundException::new);
     }
 
+    @Operation(
+            summary = "List all risk area",
+            security = {@SecurityRequirement(name = "Norman")}
+    )
     @GetMapping(value = "risk-areas")
     public List<RiskAreaDto> listAllRiskAreas() {
         logger.trace("listAllRiskAreas");

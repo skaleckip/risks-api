@@ -4,7 +4,7 @@ import java.util.List;
 
 public record PageOfDto<T> (
         List<T> items,
-        int pageIndex,
+        int pageNumber,
         int pageSize,
         int pageCount) {
 }

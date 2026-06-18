@@ -1,6 +1,5 @@
 package org.norman.risks.metadata.svc;
 
-import jakarta.transaction.Transactional;
 import org.norman.risks.metadata.dto.RiskAreaDto;
 import org.norman.risks.metadata.model.RiskArea;
 import org.norman.risks.metadata.model.RiskAreaRepository;
@@ -9,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -23,19 +23,19 @@ public class MetaService {
         this.riskAreaRepository = riskAreaRepository;
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<RiskAreaDto> findRiskAreaByIdOptional(UUID id) {
         logger.trace("findRiskAreaByIdOptional: id={}", id);
         return riskAreaRepository.findById(id).map(this::toRiskAreaDto);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public Optional<RiskAreaDto> findRiskAreaByCodeOptional(String code) {
         logger.trace("findRiskAreaByCodeOptional: code={}", code);
         return riskAreaRepository.findByCode(code).map(this::toRiskAreaDto);
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<RiskAreaDto> listAllRiskAreas() {
         logger.trace("listAllRiskAreas");
         var list = riskAreaRepository.findAll();
