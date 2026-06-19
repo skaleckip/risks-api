@@ -24,7 +24,7 @@ public class RiskResource {
     }
 
     @Operation(
-            summary = "Get risk",
+            summary = "Get risk by id",
             security = {@SecurityRequirement(name = "Norman")}
     )
     @GetMapping(value = "risks/{id}")
@@ -35,7 +35,7 @@ public class RiskResource {
     }
 
     @Operation(
-            summary = "Get risks paged",
+            summary = "Find all the risks paged",
             security = {@SecurityRequirement(name = "Norman")}
     )
     @GetMapping(value = "risks")
