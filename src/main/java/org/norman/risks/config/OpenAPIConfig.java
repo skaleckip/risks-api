@@ -3,7 +3,6 @@ package org.norman.risks.config;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.boot.security.oauth2.server.resource.autoconfigure.OAuth2ResourceServerProperties;
 import org.springframework.context.annotation.Bean;
@@ -22,7 +21,7 @@ public class OpenAPIConfig {
         var issuer = properties.getJwt().getIssuerUri();
         return new OpenAPI()
                 .info(new Info().title("Secured API").version("1.0"))
-                .addSecurityItem(new SecurityRequirement().addList("Norman")).components(new Components()
+                .components(new Components()
                         .addSecuritySchemes("Norman", new SecurityScheme()
                                 .name("Norman")
                                 .type(SecurityScheme.Type.OPENIDCONNECT)

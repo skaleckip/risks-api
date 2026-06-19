@@ -16,9 +16,8 @@ import java.util.*;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
-@SuppressWarnings("DefaultAnnotationParam")
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity
 public class OAuthSecurityConfig {
     // Teach Spring how to read Keycloak-specific data,
     // mainly user roles, from JWT tokens passed in requests.
