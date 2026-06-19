@@ -46,8 +46,8 @@ public class RiskResource {
         logger.trace("pageRisksByQuery: name={}, pageNumber={}, pageSize={}",
                 name, pageNumber, pageSize);
 
-        if (pageNumber < 1) {
-            logger.warn("pageRisksByQuery.pageNumber: zero or negative");
+        if (pageNumber < 0) {
+            logger.warn("pageRisksByQuery.pageNumber: negative");
             throw new BadRequestException();
         }
 
