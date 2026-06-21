@@ -15,11 +15,11 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping(value = "api")
-public class RiskResource {
-    private final Logger logger = LoggerFactory.getLogger(RiskResource.class);
+public class RiskController {
+    private final Logger logger = LoggerFactory.getLogger(RiskController.class);
     private final RiskService service;
 
-    public RiskResource(RiskService service) {
+    public RiskController(RiskService service) {
         this.service = service;
     }
 

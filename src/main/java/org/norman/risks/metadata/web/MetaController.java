@@ -18,11 +18,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping(value = "api")
 @SecurityRequirement(name = "Norman")
-public class MetaResource {
-    private final Logger logger = LoggerFactory.getLogger(MetaResource.class);
+public class MetaController {
+    private final Logger logger = LoggerFactory.getLogger(MetaController.class);
     private final MetaService service;
 
-    public MetaResource(MetaService service) {
+    public MetaController(MetaService service) {
         this.service = service;
     }
 

@@ -1,0 +1,40 @@
+spring:
+  application:
+    name: risks-api
+  datasource:
+    password: risks
+    username: risks
+    url: jdbc:postgresql://localhost:5432/risks
+  jpa:
+    open-in-view: false
+  threads:
+    virtual:
+      enabled: true
+  security:
+    oauth2:
+      client:
+        registration:
+          risks-api:
+            provider: keycloak
+            client-id: risks-api
+            # client-secret: <secret>
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
+      # noinspection SpellCheckingInspection
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9090/realms/norman
+springdoc:
+  swagger-ui:
+    oauth:
+      client-id: risks-openapi-ui
+      # client-secret: <secret>
+      app-name: risks-openapi-ui
+# Add environment variables for all the client secrets available in
+# Keycloak Admin Console / Norman Realm / Clients / risks-openapi-ui / Credentials / Secret
+# SPRINGDOC_SWAGGER_UI_OAUTH_CLIENT_SECRET=<secret>
+# Keycloak Admin Console / Norman Realm / Clients / risks-api / Credentials / Secret
+# SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_RISKS_API_CLIENT_SECRET=<secret>
