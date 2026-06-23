@@ -4,6 +4,6 @@ import java.util.UUID;
 
 public record RiskDto(
         UUID id,
-        String name,
-        UUID area) {
+        String name
+) {
 }

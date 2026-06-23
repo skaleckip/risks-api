@@ -1,7 +1,10 @@
 package org.norman.risks.risk.svc;
 
-import org.norman.risks.metadata.model.RiskArea;
-import org.norman.risks.risk.dto.RiskDto;
+import org.norman.risks.risk.dto.ImpactClassDto;
+import org.norman.risks.risk.dto.ProbabilityClassDto;
+import org.norman.risks.risk.dto.RiskWideDto;
+import org.norman.risks.risk.model.ImpactClass;
+import org.norman.risks.risk.model.ProbabilityClass;
 import org.norman.risks.risk.model.Risk;
 import org.norman.risks.risk.model.RiskRepository;
 import org.norman.risks.shared.dto.PageOfDto;
@@ -26,46 +29,80 @@ public class RiskService {
     }
 
     @Transactional(readOnly = true)
-    public Optional<RiskDto> findRiskByIdOptional(UUID id) {
+    public Optional<RiskWideDto> findRiskWideByIdOptional(UUID id) {
         logger.trace("findRiskByIdOptional: id={}", id);
-        return riskRepository.findById(id).map(this::toRiskDto);
+        return riskRepository.findById(id).map(this::toRiskWideDto);
     }
 
     @Transactional(readOnly = true)
-    public PageOfDto<RiskDto> pageRisksByNames(
-            String name,
+    public PageOfDto<RiskWideDto> pageRisksBySystemVersionId(
+            UUID systemVersionId,
             int pageNumber,
             int pageSize) {
-        logger.trace("pageRisksByNames: name={}, pageNumber={}, pageSize={}", name, pageNumber, pageSize);
-        var page = riskRepository.findByNameLike(name, PageRequest.of(pageNumber, pageSize));
-        return this.toRiskDtoPage(page);
+        logger.trace("pageRisksByNames: name={}, pageNumber={}, pageSize={}", systemVersionId, pageNumber, pageSize);
+        var page = riskRepository.findBySystemVersionId(systemVersionId, PageRequest.of(pageNumber, pageSize));
+        return this.toRiskWideDtoPage(page);
     }
 
     @Transactional(readOnly = true)
-    public PageOfDto<RiskDto> pageAllRisks(
+    public PageOfDto<RiskWideDto> pageAllRisksWide(
             int pageNumber,
             int pageSize) {
         logger.trace("pageAllRisks: pageNumber={}, pageSize={}", pageNumber, pageSize);
         var page = riskRepository.findAll(PageRequest.of(pageNumber, pageSize));
-        return this.toRiskDtoPage(page);
+        return this.toRiskWideDtoPage(page);
     }
 
-    public RiskDto toRiskDto(Risk risk) {
+    private PageOfDto<RiskWideDto> toRiskWideDtoPage(Page<Risk> page) {
+        return new PageOfDto<>(
+                toRiskWideDtoList(page.getContent()),
+                page.getNumber(),
+                page.getSize(),
+                page.getTotalPages());
+    }
+
+    public RiskWideDto toRiskWideDto(Risk risk) {
         if (risk == null) {
             return null;
         }
 
-        return new RiskDto(
+        return new RiskWideDto(
                 risk.getId(),
                 risk.getName(),
-                Optional.ofNullable(risk.getArea()).map(RiskArea::getId).orElse(null));
+                risk.getDescription(),
+                risk.getOwnerName(),
+                risk.getOwnerUsername(),
+                toRiskProbabilityClassDto(risk.getProbabilityClass()),
+                toRiskImpactClassDto(risk.getImpactClass()));
     }
 
-    public List<RiskDto> toRiskDtoList(List<Risk> riskList) {
-        return riskList.stream().map(this::toRiskDto).toList();
+    private ProbabilityClassDto toRiskProbabilityClassDto(ProbabilityClass probabilityClass) {
+        if (probabilityClass == null) {
+            return null;
+        }
+
+        return new ProbabilityClassDto(
+                probabilityClass.getId(),
+                probabilityClass.getCode(),
+                probabilityClass.getName(),
+                probabilityClass.getDescription()
+        );
     }
 
-    public PageOfDto<RiskDto> toRiskDtoPage(Page<Risk> riskPage) {
-        return new PageOfDto<>(this.toRiskDtoList(riskPage.getContent()), riskPage.getNumber(), riskPage.getSize(), riskPage.getTotalPages());
+    private ImpactClassDto toRiskImpactClassDto(ImpactClass impactClass) {
+        if (impactClass == null) {
+            return null;
+        }
+
+        return new ImpactClassDto(
+                impactClass.getId(),
+                impactClass.getCode(),
+                impactClass.getName(),
+                impactClass.getDescription()
+        );
+    }
+
+    public List<RiskWideDto> toRiskWideDtoList(List<Risk> riskList) {
+        return riskList.stream().map(this::toRiskWideDto).toList();
     }
 }

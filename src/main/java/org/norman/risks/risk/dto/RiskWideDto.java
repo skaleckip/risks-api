@@ -1,8 +1,13 @@
 package org.norman.risks.risk.dto;
 
-import org.norman.risks.metadata.dto.RiskAreaDto;
+import java.util.UUID;
 
 public record RiskWideDto(
+        UUID id,
         String name,
-        RiskAreaDto area) {
+        String description,
+        String ownerName,
+        String ownerUsername,
+        ProbabilityClassDto probabilityClass,
+        ImpactClassDto impactClass) {
 }

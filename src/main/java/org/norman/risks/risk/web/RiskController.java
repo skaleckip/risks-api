@@ -2,7 +2,7 @@ package org.norman.risks.risk.web;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
-import org.norman.risks.risk.dto.RiskDto;
+import org.norman.risks.risk.dto.RiskWideDto;
 import org.norman.risks.risk.svc.RiskService;
 import org.norman.risks.shared.dto.PageOfDto;
 import org.norman.risks.shared.web.BadRequestException;
@@ -28,9 +28,9 @@ public class RiskController {
             security = {@SecurityRequirement(name = "Norman")}
     )
     @GetMapping(value = "risks/{id}")
-    public RiskDto getRiskById(@PathVariable UUID id) {
+    public RiskWideDto getRiskWideById(@PathVariable UUID id) {
         logger.trace("getRiskById: id={}", id);
-        return service.findRiskByIdOptional(id)
+        return service.findRiskWideByIdOptional(id)
                 .orElseThrow(NotFoundException::new);
     }
 
@@ -38,28 +38,29 @@ public class RiskController {
             summary = "Find all the risks paged",
             security = {@SecurityRequirement(name = "Norman")}
     )
-    @GetMapping(value = "risks")
-    public PageOfDto<RiskDto> pageRisksByQuery(
-            @RequestParam(value = "name") String name,
+    @GetMapping(value = "system-versions/{systemVersionId}/risks")
+    public PageOfDto<RiskWideDto> pageRisksWideBySystemVersionId(
+            @PathVariable UUID systemVersionId,
             @RequestParam(value = "pageNumber") int pageNumber,
             @RequestParam(value = "pageSize") int pageSize) {
-        logger.trace("pageRisksByQuery: name={}, pageNumber={}, pageSize={}",
-                name, pageNumber, pageSize);
+        logger.trace("pageRisksWideBySystemVersionId: systemVersionId={}, pageNumber={}, pageSize={}",
+                systemVersionId, pageNumber, pageSize);
+
+        if (systemVersionId == null) {
+            logger.warn("pageRisksWideBySystemVersionId.systemVersionId: null");
+            throw new BadRequestException();
+        }
 
         if (pageNumber < 0) {
-            logger.warn("pageRisksByQuery.pageNumber: negative");
+            logger.warn("pageRisksWideBySystemVersionId.pageNumber: negative");
             throw new BadRequestException();
         }
 
         if (pageSize < 1) {
-            logger.warn("pageRisksByQuery.pageSize: zero or negative");
+            logger.warn("pageRisksWideBySystemVersionId.pageSize: zero or negative");
             throw new BadRequestException();
         }
 
-        if (name != null && !name.isEmpty()) {
-            return service.pageRisksByNames(name, pageNumber, pageSize);
-        }
-
-        return service.pageAllRisks(pageNumber, pageSize);
+        return service.pageRisksBySystemVersionId(systemVersionId, pageNumber, pageSize);
     }
 }
