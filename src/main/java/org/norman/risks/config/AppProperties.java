@@ -14,6 +14,14 @@ public class AppProperties {
         this.openApi = openApi;
     }
 
+    public Keycloak getKeycloak() {
+        return keycloak;
+    }
+
+    public OpenApi getOpenApi() {
+        return openApi;
+    }
+
     public static class Keycloak {
         private String url;
         private String realm;

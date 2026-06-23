@@ -16,14 +16,19 @@ spring:
         registration:
           # Do not change name, the code refers to it!
           keycloak-admin-api:
-            provider: keycloak
+            provider: keycloak-admin-api
             client-id: ${app.keycloak.admin-api.client-id}
             client-secret: ${app.keycloak.admin-api.client-secret}
             client-authentication-method: client_secret_basic
             authorization-grant-type: client_credentials
         provider:
-          keycloak:
-            issuer-uri: ${spring.security.oauth2.resourceserver.jwt.issuer-uri}
+          keycloak-admin-api:
+            # We define the Keycloak Admin API client in the same realm
+            # as the risks-ui and risks-openapi-ui client. However, We could,
+            # if we only wanted, to pick another realm for this purpose.
+            # The "master" realm seems a likely choice to define the apps
+            # allowed to sniff around all the Keycloak data and add users.
+            issuer-uri: "${app.keycloak.url}/realms/${app.keycloak.realm}"
       # noinspection SpellCheckingInspection
       resourceserver:
         jwt:
