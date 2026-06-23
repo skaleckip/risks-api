@@ -14,10 +14,11 @@ spring:
     oauth2:
       client:
         registration:
+          # Do not change name, the code refers to it!
           keycloak-admin-api:
             provider: keycloak
-            client-id: ${app.admin-api.client-id}
-            client-secret: ${app.admin-api.client-secret}
+            client-id: ${app.keycloak.admin-api.client-id}
+            client-secret: ${app.keycloak.admin-api.client-secret}
             client-authentication-method: client_secret_basic
             authorization-grant-type: client_credentials
         provider:
@@ -38,9 +39,9 @@ app:
     url: http://localhost:9090
     # noinspection SpellCheckingInspection
     realm: norman
-  admin-api:
-    client-id: risks-api
-    client-secret: admin-api-SECRET
+    admin-api:
+      client-id: risks-api
+      client-secret: admin-api-SECRET
   open-api:
     client-id: risks-openapi-ui
     client-secret: risks-openapi-ui-SECRET

@@ -2,26 +2,27 @@ package org.norman.risks.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@SuppressWarnings("SpellCheckingInspection")
 @ConfigurationProperties(prefix = "app")
 public class AppProperties {
+    @SuppressWarnings({"unused", "FieldMayBeFinal", "FieldCanBeLocal"})
     private Keycloak keycloak;
-    private AdminApi adminApi;
+    @SuppressWarnings({"unused", "FieldMayBeFinal", "FieldCanBeLocal"})
     private OpenApi openApi;
 
-    public AppProperties(Keycloak keycloak, AdminApi adminApi, OpenApi openApi) {
+    public AppProperties(Keycloak keycloak, OpenApi openApi) {
         this.keycloak = keycloak;
-        this.adminApi = adminApi;
         this.openApi = openApi;
     }
 
     public static class Keycloak {
         private String url;
         private String realm;
+        private AdminApi adminApi;
 
-        public Keycloak(String url, String realm) {
+        public Keycloak(String url, String realm, AdminApi adminApi) {
             this.url = url;
             this.realm = realm;
+            this.adminApi = adminApi;
         }
 
         public String getUrl() {
@@ -38,6 +39,14 @@ public class AppProperties {
 
         public void setRealm(String realm) {
             this.realm = realm;
+        }
+
+        public AdminApi getAdminApi() {
+            return adminApi;
+        }
+
+        public void setAdminApi(AdminApi adminApi) {
+            this.adminApi = adminApi;
         }
     }
 
