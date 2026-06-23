@@ -14,10 +14,10 @@ spring:
     oauth2:
       client:
         registration:
-          risks-api:
+          keycloak-admin-api:
             provider: keycloak
-            client-id: risks-api
-            # client-secret: <secret>
+            client-id: ${app.admin-api.client-id}
+            client-secret: ${app.admin-api.client-secret}
             client-authentication-method: client_secret_basic
             authorization-grant-type: client_credentials
         provider:
@@ -26,15 +26,21 @@ spring:
       # noinspection SpellCheckingInspection
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9090/realms/norman
+          issuer-uri: "${app.keycloak.url}/realms/${app.keycloak.realm}"
 springdoc:
   swagger-ui:
     oauth:
-      client-id: risks-openapi-ui
-      # client-secret: <secret>
-      app-name: risks-openapi-ui
-# Add environment variables for all the client secrets available in
-# Keycloak Admin Console / Norman Realm / Clients / risks-openapi-ui / Credentials / Secret
-# SPRINGDOC_SWAGGER_UI_OAUTH_CLIENT_SECRET=<secret>
-# Keycloak Admin Console / Norman Realm / Clients / risks-api / Credentials / Secret
-# SPRING_SECURITY_OAUTH2_CLIENT_REGISTRATION_RISKS_API_CLIENT_SECRET=<secret>
+      client-id: ${app.open-api.client-id}
+      client-secret: ${app.open-api.client-secret}
+      app-name: ${app.open-api.client-id}
+app:
+  keycloak:
+    url: http://localhost:9090
+    # noinspection SpellCheckingInspection
+    realm: norman
+  admin-api:
+    client-id: risks-api
+    client-secret: admin-api-SECRET
+  open-api:
+    client-id: risks-openapi-ui
+    client-secret: risks-openapi-ui-SECRET

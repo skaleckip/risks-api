@@ -19,7 +19,7 @@ import java.io.IOException;
 public class KeycloakAdminInterceptor implements ClientHttpRequestInterceptor {
     // here you have to replace registrationId with the one that you
     // used in the application.properties
-    private static final String REGISTRATION_ID = "risks-api";
+    private static final String REGISTRATION_ID = "keycloak-admin-api";
 
     private final OAuth2AuthorizedClientManager authorizedClientManager;
 
