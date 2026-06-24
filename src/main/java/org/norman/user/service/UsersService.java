@@ -1,6 +1,6 @@
 package org.norman.user.service;
 
-import org.norman.user.client.KeycloakAdminClient;
+import org.norman.user.client.KeycloakAdminApiClient;
 import org.norman.user.dto.UserDto;
 import org.springframework.stereotype.Service;
 
@@ -8,13 +8,13 @@ import java.util.List;
 
 @Service
 public class UsersService {
-    private final KeycloakAdminClient keycloakAdminClient;
+    private final KeycloakAdminApiClient keycloakAdminApiClient;
 
-    public UsersService(KeycloakAdminClient keycloakAdminClient) {
-        this.keycloakAdminClient = keycloakAdminClient;
+    public UsersService(KeycloakAdminApiClient keycloakAdminApiClient) {
+        this.keycloakAdminApiClient = keycloakAdminApiClient;
     }
 
     public List<UserDto> listUsers() {
-        return UserDto.fromList(keycloakAdminClient.getUsers());
+        return UserDto.fromList(keycloakAdminApiClient.getUsers());
     }
 }

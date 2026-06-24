@@ -17,10 +17,12 @@ spring:
           # Do not change name, the code refers to it!
           keycloak-admin-api:
             provider: keycloak-admin-api
+            authorization-grant-type: client_credentials
+            client-authentication-method: client_secret_basic
             client-id: ${app.keycloak.admin-api.client-id}
             client-secret: ${app.keycloak.admin-api.client-secret}
-            client-authentication-method: client_secret_basic
-            authorization-grant-type: client_credentials
+            scope:
+              - openid
         provider:
           keycloak-admin-api:
             # We define the Keycloak Admin API client in the same realm

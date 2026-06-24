@@ -3,7 +3,9 @@ package org.norman.customer.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.norman.system.entity.SystemVersion;
 
+import java.util.List;
 import java.util.UUID;
 
 @Setter
@@ -18,4 +20,7 @@ public class Customer {
 
     @Column(name = "name")
     private String name;
+
+    @OneToMany(mappedBy = "customer")
+    private List<SystemVersion> systemVersions;
 }
