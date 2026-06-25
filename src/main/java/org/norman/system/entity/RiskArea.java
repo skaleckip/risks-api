@@ -1,4 +1,4 @@
-package org.norman.metadata.entity;
+package org.norman.system.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -13,9 +13,18 @@ import java.util.UUID;
 public class RiskArea {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Column(name = "id")
     private UUID id;
+
+    @ManyToOne
+    @JoinColumn(name = "system_version_id")
+    private SystemVersion systemVersion;
 
     @Column(name = "code")
     private String code;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "description")
+    private String description;
 }

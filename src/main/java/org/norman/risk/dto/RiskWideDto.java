@@ -2,6 +2,8 @@ package org.norman.risk.dto;
 
 import org.norman.risk.entity.Risk;
 import org.norman.shared.dto.PageDto;
+import org.norman.system.dto.ImpactClassDto;
+import org.norman.system.dto.ProbabilityClassDto;
 import org.springframework.data.domain.Page;
 
 import java.util.List;

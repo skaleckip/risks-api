@@ -32,7 +32,7 @@ public class RiskController {
                 .orElseThrow(NotFoundException::new);
     }
 
-    @Operation(summary = "Find all the risks paged")
+    @Operation(summary = "Find all the risks by system version paged")
     @GetMapping(value = "system-versions/{systemVersionId}/risks")
     public PageDto<RiskWideDto> pageRisksWideBySystemVersionId(
             @PathVariable UUID systemVersionId,
@@ -57,5 +57,32 @@ public class RiskController {
         }
 
         return service.pageRisksBySystemVersionId(systemVersionId, pageNumber, pageSize);
+    }
+
+    @Operation(summary = "Find all the risks by owner paged")
+    @GetMapping(value = "/risks-by-owner/{ownerUsername}")
+    public PageDto<RiskWideDto> pageRisksWideByOwnerUsername(
+            @PathVariable String ownerUsername,
+            @RequestParam(value = "pageNumber") int pageNumber,
+            @RequestParam(value = "pageSize") int pageSize) {
+        logger.trace("pageRisksWideByOwnerUsername: pageRisksWideByOwnerUsername={}, pageNumber={}, pageSize={}",
+                ownerUsername, pageNumber, pageSize);
+
+        if (ownerUsername == null || ownerUsername.isBlank()) {
+            logger.warn("pageRisksWideByOwnerUsername.ownerUsername: null or blank");
+            throw new BadRequestException();
+        }
+
+        if (pageNumber < 0) {
+            logger.warn("pageRisksWideByOwnerUsername.pageNumber: negative");
+            throw new BadRequestException();
+        }
+
+        if (pageSize < 1) {
+            logger.warn("pageRisksWideByOwnerUsername.pageSize: zero or negative");
+            throw new BadRequestException();
+        }
+
+        return service.pageRisksByOwnerUsername(ownerUsername, pageNumber, pageSize);
     }
 }

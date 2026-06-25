@@ -3,6 +3,8 @@ package org.norman.risk.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.norman.system.entity.ImpactClass;
+import org.norman.system.entity.ProbabilityClass;
 
 import java.util.UUID;
 

@@ -59,6 +59,7 @@ public class OAuthSecurityConfig {
 
     @Bean
     UrlBasedCorsConfigurationSource corsConfigurationSource() {
+        // Todo, add externalized configuration for all the CORS settings
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOrigins(Arrays.asList(
                 "http://localhost:5173",

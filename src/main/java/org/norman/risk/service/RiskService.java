@@ -32,8 +32,18 @@ public class RiskService {
             UUID systemVersionId,
             int pageNumber,
             int pageSize) {
-        logger.trace("pageRisksByNames: name={}, pageNumber={}, pageSize={}", systemVersionId, pageNumber, pageSize);
+        logger.trace("pageRisksByNames: systemVersionId={}, pageNumber={}, pageSize={}", systemVersionId, pageNumber, pageSize);
         var page = riskRepository.findBySystemVersionId(systemVersionId, PageRequest.of(pageNumber, pageSize));
+        return RiskWideDto.fromPage(page);
+    }
+
+    @Transactional(readOnly = true)
+    public PageDto<RiskWideDto> pageRisksByOwnerUsername(
+            String ownerUsername,
+            int pageNumber,
+            int pageSize) {
+        logger.trace("pageRisksByOwnerUsername: ownerUsername={}, pageNumber={}, pageSize={}", ownerUsername, pageNumber, pageSize);
+        var page = riskRepository.findByOwnerUsername(ownerUsername, PageRequest.of(pageNumber, pageSize));
         return RiskWideDto.fromPage(page);
     }
 }

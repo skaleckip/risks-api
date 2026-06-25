@@ -9,4 +9,5 @@ import java.util.UUID;
 
 public interface RiskRepository extends JpaRepository<Risk, UUID> {
     Page<Risk> findBySystemVersionId(UUID systemVersionId, Pageable page);
+    Page<Risk> findByOwnerUsername(String ownerUsername, Pageable page);
 }
