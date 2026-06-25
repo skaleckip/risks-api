@@ -35,8 +35,10 @@ public class OAuthSecurityConfig {
                 .getOrDefault("realm_access", Collections.emptyMap()));
         final Collection<String> roles = ((Collection<String>) realmAccess
                 .getOrDefault("roles", Collections.emptyList()));
-        // Todo, translate roles to ROLE_* authorities to use them with hasRole(...)
         return roles.stream()
+                // The hasRole(...) Spring method required ROLE_ prefix
+                // We could use hasAutority(...), but let's make it Spring-native.
+                .map(role -> String.format("ROLE_%s", role))
                 .map(role -> ((GrantedAuthority) new SimpleGrantedAuthority(role)))
                 .toList();
     }
@@ -51,6 +53,7 @@ public class OAuthSecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers("/swagger-ui/**").permitAll()
                         .requestMatchers("/v3/api-docs*/**").permitAll()
+                        .requestMatchers("/api/users").hasRole("auditor")
                         .anyRequest().authenticated()
                 )
                 .oauth2ResourceServer(oauth -> oauth.jwt(withDefaults()))
