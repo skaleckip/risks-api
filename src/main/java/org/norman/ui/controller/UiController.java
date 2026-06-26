@@ -1,5 +1,7 @@
 package org.norman.ui.controller;
 
+import lombok.val;
+import org.norman.ui.dto.UiDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,13 +13,13 @@ import java.util.Objects;
 @RequestMapping("/api")
 public class UiController {
     @GetMapping("/ui/system-versions")
-    public Boolean showSystemVersions() {
+    public UiDto showSystemVersions() {
         var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (Objects.isNull(authentication)) return false;
-        return authentication
+        if (Objects.isNull(authentication)) return UiDto.from(false);
+        return UiDto.from(authentication
                 .getAuthorities()
                 .stream()
                 .anyMatch(authority ->
-                        Objects.equals(authority.getAuthority(), "ROLE_auditor"));
+                        Objects.equals(authority.getAuthority(), "ROLE_auditor")));
     }
 }
