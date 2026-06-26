@@ -1,6 +1,5 @@
 package org.norman.ui.controller;
 
-import lombok.val;
 import org.norman.ui.dto.UiDto;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
